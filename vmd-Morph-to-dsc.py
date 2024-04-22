@@ -158,8 +158,8 @@ if __name__ == '__main__':
         xa = 1
         for s,sb in enumerate(str_mouth):
             if vmd.morph_keyframe_record[i]['MorphName']==str_mouth[s]:
-                if vmd.morph_keyframe_record[i]['Weight']== 0 :
-                    break
+                # if vmd.morph_keyframe_record[i]['Weight']== 0 :
+                #     break
                 pianyizi+=1
                 text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
                 text2 ='MOUTH_ANIM(0, 0,' +str(s)+ ' , 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
@@ -168,8 +168,8 @@ if __name__ == '__main__':
         if xa == 1 :
             for s,sb in enumerate(str_expre):
                 if vmd.morph_keyframe_record[i]['MorphName']==str_expre[s]:
-                    if vmd.morph_keyframe_record[i]['Weight']== 0 :
-                        break
+                    # if vmd.morph_keyframe_record[i]['Weight']== 0 :
+                    #     break
                     pianyizi+=1
                     if vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi==1217309:
                         print(1)

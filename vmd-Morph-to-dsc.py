@@ -4,8 +4,6 @@ import json
 import re
 from tkinter import filedialog
 
-type = 0  #角色编号
-trans = 100  #补间帧数
 
 class Vmd:
 
@@ -63,7 +61,6 @@ class Vmd:
             })
             current_index += 111
 
-        # vmd['MorphKeyFrameNumber'] = int.from_bytes(array[current_index: current_index+4], byteorder="little", signed=False)
         vmd.morph_keyframe_number = int.from_bytes(array[current_index: current_index+4], byteorder="little", signed=False)
         current_index += 4
 
@@ -164,7 +161,7 @@ if __name__ == '__main__':
                 #     break
                 pianyizi+=1
                 text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
-                text2 ='MOUTH_ANIM('+str(type)+', 0,' +str(s)+ ' , '+str(trans)+', '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
+                text2 ='MOUTH_ANIM(0, 0,' +str(s)+ ' , 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                 xa =0
                 break
         if xa == 1 :
@@ -176,7 +173,7 @@ if __name__ == '__main__':
                     if vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi==1217309:
                         print(1)
                     text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
-                    text2 ='EXPRESSION('+str(type)+', ' +str(s)+ ', '+str(trans)+', '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
+                    text2 ='EXPRESSION(0, ' +str(s)+ ', 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                     break
         # str_text[i] = text1 + '\n' + text2
         # str_text.append(text1 + "\n" + text2)
@@ -195,37 +192,19 @@ if __name__ == '__main__':
 # print(asp38(example_text)) 作者：Leua https://www.bilibili.com/read/cv29516422/?spm_id_from=333.999.0.0 出处：bilibili
 # 将原始文本分割为单独的行
     lines = text.strip().split('\n')
-    # i = 0
-    # while i < len(lines):
-    #     if lines[i].startswith('TIME(') and i + 1 < len(lines) and lines[i + 1].strip() == '':
-    #         del lines[i:i + 2]  # 删除时间行及其后的空行
-    #     else:
-    #         i += 1
-    # 处理每一行，将时间和动画行分开
     time_anim_pairs = []
     for i in range(0, len(lines), 2):
         time = int(lines[i].split('(')[1].split(')')[0])
         anim = lines[i + 1]
         time_anim_pairs.append((time, anim))
 
-    # 检查时间序列并进行线性修复
-    for i in range(1, len(time_anim_pairs)):
-        if time_anim_pairs[i][0] < time_anim_pairs[i - 1][0]:
-            # 找到前一个时间点
-            start_index = i - 1
-            while start_index > 0 and time_anim_pairs[start_index][0] > time_anim_pairs[i][0]:
-                start_index -= 1
+    # gpt--假设time_anim_pairs是一个元组列表，每个元组的第一个元素是排序的关键字
+    time_anim_pairs.sort(key=lambda x: x[0])
 
-            # 计算新的时间间隔
-            start_time = time_anim_pairs[start_index][0]
-            end_time = time_anim_pairs[i][0]
-            num_intervals = i - start_index
-            time_interval = (end_time - start_time) // num_intervals
+    # 打印成功消息
+    print("time_anim_pairs已经成功排序。")
 
-            # 修复时间
-            for j in range(start_index + 1, i):
-                new_time = start_time + time_interval * (j - start_index)
-                time_anim_pairs[j] = (new_time, time_anim_pairs[j][1])
+
 
     # 格式化为原始格式输出
     fixed_text = '\n'.join([f"TIME({time});\n{anim}" for time, anim in time_anim_pairs])
@@ -240,9 +219,6 @@ if __name__ == '__main__':
 #     # 使用json.dumps将字典转换为字符串，然后写入到文件中
 #     f.write(json.dumps(vmd.morph_keyframe_record, ensure_ascii=False, indent=4))
 ######################################################################
- # 使用filedialog.asksaveasfilename获取用户选择的文件名
     filename = filedialog.asksaveasfilename(title="Select file",filetypes=(("text files", "*.txt"), ("all files", "*.*")),initialfile="dsc.txt")
-# 使用'w'模式打开文件，如果文件已存在则会被覆盖
 with open(filename, 'w') as f:
-# 使用json.dumps将字典转换为字符串，然后写入到文件中
     f.write(fixed_text)

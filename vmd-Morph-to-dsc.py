@@ -4,6 +4,8 @@ import json
 import re
 from tkinter import filedialog
 
+type = 0  #角色编号
+trans = 100  #补间帧数
 
 class Vmd:
 
@@ -162,7 +164,7 @@ if __name__ == '__main__':
                 #     break
                 pianyizi+=1
                 text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
-                text2 ='MOUTH_ANIM(0, 0,' +str(s)+ ' , 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
+                text2 ='MOUTH_ANIM('+str(type)+', 0,' +str(s)+ ' , '+str(trans)+', '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                 xa =0
                 break
         if xa == 1 :
@@ -174,7 +176,7 @@ if __name__ == '__main__':
                     if vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi==1217309:
                         print(1)
                     text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
-                    text2 ='EXPRESSION(0, ' +str(s)+ ', 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
+                    text2 ='EXPRESSION('+str(type)+', ' +str(s)+ ', '+str(trans)+', '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                     break
         # str_text[i] = text1 + '\n' + text2
         # str_text.append(text1 + "\n" + text2)

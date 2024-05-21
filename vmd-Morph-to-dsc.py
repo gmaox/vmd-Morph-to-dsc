@@ -128,7 +128,15 @@ class Vmd:
         return vmd
 if __name__ == '__main__':
     filename = filedialog.askopenfilename(filetypes = [("Text", "*.vmd")])
-    vmd = Vmd.from_file(filename, model_name_encode="gb2312")
+    try:
+        vmd = Vmd.from_file(filename, model_name_encode="gb2312")
+    except Exception as e:
+        try:
+            print("编码方式改变，可能需要些时间(Changing the encoding method may take some time)")
+            vmd = Vmd.from_file(filename, model_name_encode="utf-16")
+        except Exception as e:
+            print("编码方式改变，可能需要些时间(Changing the encoding method may take some time)")
+            vmd = Vmd.from_file(filename)
     from pprint import pprint
     pprint(vmd.morph_keyframe_record)
 #######
@@ -160,7 +168,7 @@ if __name__ == '__main__':
                 # if vmd.morph_keyframe_record[i]['Weight']== 0 :
                 #     break
                 pianyizi+=1
-                text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
+                text1 = 'TIME('+str(int(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi))+');\n'
                 text2 ='MOUTH_ANIM(0, 0,' +str(s)+ ' , 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                 xa =0
                 break
@@ -172,7 +180,7 @@ if __name__ == '__main__':
                     pianyizi+=1
                     if vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi==1217309:
                         print(1)
-                    text1 = 'TIME('+str(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi)+');\n'
+                    text1 = 'TIME('+str(int(vmd.morph_keyframe_record[i]['FrameTime'] * 3333+pianyizi))+');\n'
                     text2 ='EXPRESSION(0, ' +str(s)+ ', 100, '+str(vmd.morph_keyframe_record[i]['Weight'] * 1000)+');\n'
                     break
         # str_text[i] = text1 + '\n' + text2
